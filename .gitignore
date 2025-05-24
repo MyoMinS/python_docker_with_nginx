@@ -23,3 +23,12 @@ rad.json
 TestResults.xml
 =======
 TestResults.xml
+
+.terraform*
+#ansible key file
+.ansible*
+ansible.pem
+#ignore inventory file
+production.ini
+
+all.yml
