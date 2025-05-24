@@ -1,0 +1,15 @@
+---
+- name: Start docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+
+- name: Reload php
+  ansible.builtin.service:
+    name: docker
+    state: reloaded
+
+- name: Restart docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted

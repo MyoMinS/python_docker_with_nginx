@@ -1,0 +1,29 @@
+# Nginx server configuration for a Next.js application
+
+server {
+    listen 80;  # Listen on port 80 (HTTP)
+    server_name _;
+
+    # Proxy requests to the Next.js server
+    location / {
+      # Pass requests to the Next.js server running on localhost:3000
+      proxy_pass http://localhost:3000;
+
+      # Proxy settings to handle WebSockets and HTTP/1.1
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+
+      # Additional proxy headers
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+
+      # Error handling and redirects
+      error_page 500 502 503 504 /50x.html;
+      location = /50x.html {
+        root /usr/share/nginx/html;
+      }
+    }
+}

@@ -1,0 +1,9 @@
+- name: Install LAMP for Laravel
+  hosts: webserver
+  become: true
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - common
+    - nginx
+    - docker

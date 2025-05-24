@@ -1,0 +1,32 @@
+- name: APT update
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Allocate swap file
+  ansible.builtin.command: fallocate -l 1G /swapfile
+  args:
+    creates: /swapfile
+
+- name: Set correct permissions on swap file
+  ansible.builtin.file:
+    path: /swapfile
+    mode: '0600'
+
+- name: Set up swap area
+  ansible.builtin.command: mkswap /swapfile
+  register: my_output
+  changed_when: my_output.rc != 0
+  ignore_errors: true
+
+
+- name: Add swap entry to /etc/fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    line: '/swapfile none swap sw 0 0'
+    state: present
+
+- name: Enable swap
+  ansible.builtin.command: swapon /swapfile
+  register: my_output
+  changed_when: my_output.rc != 0
+  ignore_errors: true
